@@ -16,6 +16,25 @@ const Main = styled.main`
   background-color: var(--color-grey-50);
 `;
 
+// const API_URL =
+//   "https://sqyfnfdqixejekchzicd.supabase.co/rest/v1/cabins?select=*";
+// const API_KEY =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxeWZuZmRxaXhlamVrY2h6aWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNDU0MDEsImV4cCI6MjA3NDgyMTQwMX0.upLzpvW20_DfDtlCnxTeT2-BO5w4QN3l84ol6F_t_G0"; // 👈 replace with your anon public key
+
+// async function getCabins() {
+//   const res = await fetch(API_URL, {
+//     headers: {
+//       apikey: API_KEY,
+//       Authorization: `Bearer ${API_KEY}`,
+//     },
+//   });
+
+//   const data = await res.json();
+//   console.log(data);
+// }
+
+// getCabins();
+
 function AppLayout() {
   return (
     <StyledAppLayout>
