@@ -1,48 +1,3 @@
-// import { styled } from "styled-components";
-// import GlobalStyles from "./styles/GlobalStyles";
-// import Button from "./ui/Button";
-// import Heading from "./ui/Heading";
-// import Row from "./ui/Row";
-// import Input from "./ui/Input";
-
-// const StyledApp = styled.div`
-//   padding: 20px;
-// `;
-
-// function App() {
-//   return (
-//     <>
-//       <GlobalStyles />
-//       <StyledApp>
-//         <Row type={"vertical"}>
-//           <Row type={"horizontal"}>
-//             <Heading as={"h1"}>The Wild Oasis</Heading>
-//             <div>
-//               <Heading as={"h2"}>Check in and out</Heading>
-//               <Button variant={"primary"} size={"medium"}>
-//                 Check in
-//               </Button>
-//               <Button variant={"danger"} size={"medium"}>
-//                 Check out
-//               </Button>
-//             </div>
-//           </Row>
-
-//           <Row type={"vertical"}>
-//             <Heading as={"h3"}>Form</Heading>
-//             <form>
-//               <Input type="number" placeholder="Number of Guests" />
-//               <Input type="number" placeholder="Number of Guests" />
-//             </form>
-//           </Row>
-//         </Row>
-//       </StyledApp>
-//     </>
-//   );
-// }
-
-// export default App;
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
@@ -55,10 +10,22 @@ import PageNotFound from "./pages/PageNotFound";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import AppLayout from "./ui/AppLayout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // staleTime: 60 * 1000,
+    },
+  },
+});
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
@@ -71,11 +38,31 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/cabins" element={<Cabins />} />
           </Route>
-            <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+          },
+        }}
+      />
+    </QueryClientProvider>
   );
 }
 
