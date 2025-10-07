@@ -51,7 +51,7 @@ function CreateCabinForm() {
   const queryClient = useQueryClient();
 
   const { register, handleSubmit, reset, formState, getValues } = useForm();
-  const errors = formState.errors;
+  const { errors } = formState;
 
   const { mutate, isPending } = useMutation({
     mutationFn: createCabin,
@@ -78,6 +78,7 @@ function CreateCabinForm() {
         <Input
           type="text"
           id="name"
+          disabled={isPending}
           {...register("name", { required: "this field is required!" })}
         />
       </FormRow>
@@ -86,6 +87,7 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="maxCapacity"
+          disabled={isPending}
           {...register("maxCapacity", { required: "this field is required!" })}
         />
       </FormRow>
@@ -94,7 +96,15 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          {...register("regularPrice", { required: "this field is required!" })}
+          defaultValue={0}
+          disabled={isPending}
+          {...register("regularPrice", {
+            required: "this field is required!",
+            min: {
+              value: 0,
+              message: "regular price should be positive!",
+            },
+          })}
         />
       </FormRow>
 
@@ -103,18 +113,27 @@ function CreateCabinForm() {
           type="number"
           id="discount"
           defaultValue={0}
+          disabled={isPending}
           {...register("discount", {
             validate: (value) =>
               value <= getValues().regularPrice ||
               "discount must be smaller then regular price",
+            min: {
+              value: 0,
+              message: "regular price should be positive!",
+            },
           })}
         />
       </FormRow>
 
-      <FormRow label={"Description for website"} error={errors?.description?.message}>
+      <FormRow
+        label={"Description for website"}
+        error={errors?.description?.message}
+      >
         <Textarea
           type="number"
           id="description"
+          disabled={isPending}
           defaultValue=""
           {...register("description", { required: "this field is required!" })}
         />
