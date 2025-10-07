@@ -53,8 +53,9 @@ const Button = styled.button`
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
   margin-right: 5px;
+  text-transform: capitalize;
 
-  ${(props) => variations[props.variant]}
-  ${(props) => sizes[props.size]}
+  ${({ variant = "primary" }) => variations[variant]}
+  ${({ size = "medium" }) => sizes[size]}
 `;
 export default Button;
