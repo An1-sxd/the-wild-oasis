@@ -18,6 +18,7 @@ const TableHeader = styled.header`
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
   align-items: center;
+  padding: 1.4rem 2.4rem;
 
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
@@ -25,7 +26,6 @@ const TableHeader = styled.header`
   letter-spacing: 0.4px;
   font-weight: 600;
   color: var(--color-grey-600);
-  padding: 1.6rem 2.4rem;
 `;
 
 function CabinTable() {
@@ -43,6 +43,7 @@ function CabinTable() {
   return (
     <Table role="table">
       <TableHeader role="row">
+        <div></div>
         <div>cabin</div>
         <div>capacity</div>
         <div>price</div>
