@@ -1,8 +1,12 @@
 import styled from "styled-components";
+import { useState } from "react";
+import { HiTrash, HiPencil } from "react-icons/hi";
+import { HiSquare2Stack } from "react-icons/hi2";
+
 import { formatCurrency } from "../../utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
+import CreateCabinForm from "./CreateCabinForm";
+import useDeleteCabin from "./useDeleteCabin";
+import useCreateCabin from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,33 +50,54 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const { id, name, image, regularPrice, maxCapacity, discount } = cabin;
 
-  const queryClient = useQueryClient();
+  const [showForm, setShowForm] = useState(false);
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: deleteCabin,
-    onSuccess: () => {
-      toast.success("Successfully deleted!");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { mutateDelete, isDeleting } = useDeleteCabin();
+  const { mutateCreate, isCreating } = useCreateCabin();
+
+  console.log(cabin);
+  console.log(cabin.image);
 
   return (
-    <TableRow role="row">
-      <Img src={image} />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} quests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
+    <>
+      <TableRow role="row">
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
 
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(id)} disabled={isPending}>
-        delete
-      </button>
-    </TableRow>
+        {discount ? (
+          <Discount>{formatCurrency(discount)}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
+
+        <div>
+          <button
+            onClick={() =>
+              mutateCreate({
+                name: "copy of : " + name,
+                maxCapacity,
+                regularPrice,
+                discount,
+                description: cabin.description,
+                image,
+              })
+            }
+            disabled={isCreating}
+          >
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm((s) => !s)}>
+            <HiPencil />
+          </button>
+          <button onClick={() => mutateDelete(id)} disabled={isDeleting}>
+            <HiTrash />
+          </button>
+        </div>
+      </TableRow>
+      {showForm && <CreateCabinForm setShowForm={setShowForm} cabin={cabin} />}
+    </>
   );
 }
 

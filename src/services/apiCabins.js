@@ -1,11 +1,12 @@
 import supabase from "../../supabase";
+const supabaseUrl = "https://sqyfnfdqixejekchzicd.supabase.co/";
 
 export async function getCabins() {
   let { data: cabins, error } = await supabase.from("cabins").select("*");
 
   if (error) {
     console.log(error);
-    throw new Error("cabins could not be loaded");
+    throw new Error("cabins could not be loaded : " + error.message);
   }
 
   return cabins;
@@ -15,33 +16,44 @@ export async function deleteCabin(id) {
   const { data, error } = await supabase.from("cabins").delete().eq("id", id);
   if (error) {
     console.log(error);
-    throw new Error("cabin could not be deleted");
+    throw new Error("cabin could not be deleted : " + error.message);
   }
 
   return data;
 }
 
 export async function createCabin(newCabin) {
-  const imageName = `${Date.now()}-${newCabin.image.name}`; // unique name (avoid collisions)
+  // if image already exists in db
+  const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
-  // 1. Upload the image file to Supabase Storage
-  const { error: storageError } = await supabase.storage
-    .from("cabins-images") // 👈 your bucket name
-    .upload(imageName, newCabin.image);
+  let imagePath;
 
-  if (storageError) {
-    console.log(storageError);
-    throw new Error("Image could not be uploaded");
+  const imageName = `${Date.now()}-${newCabin.image.name}`.replaceAll("/", "");
+  // <<unique>> name (avoid collisions) + <<replace>> all slashes (/) so supabase doesn't create foldres instead !
+
+  if (hasImagePath) {
+    // if image exists in db
+    imagePath = newCabin.image;
+  } else {
+    // if image doesn't exist in db
+
+    // 1. Upload the image file to Supabase Storage
+    const { error: storageError } = await supabase.storage
+      .from("cabins-images") // 👈 your bucket name
+      .upload(imageName, newCabin.image);
+
+    if (storageError) {
+      console.log(storageError);
+      throw new Error("Image could not be uploaded : " + storageError.message);
+    }
+
+    // 2. Get public URL after upload succeeds
+    const { data: publicUrlData } = supabase.storage
+      .from("cabins-images")
+      .getPublicUrl(imageName);
+
+    imagePath = publicUrlData.publicUrl;
   }
-
-  // 2. Get public URL after upload succeeds
-  const { data: publicUrlData } = supabase
-    .storage
-    .from("cabins-images")
-    .getPublicUrl(imageName);
-
-  const imagePath = publicUrlData.publicUrl;
-
   // 3. Insert newCabin with public imagePath into DB
   const { data, error } = await supabase
     .from("cabins")
@@ -50,7 +62,21 @@ export async function createCabin(newCabin) {
 
   if (error) {
     console.log(error);
-    throw new Error("cabin could not be created");
+    throw new Error("cabin could not be created : " + error.message);
+  }
+
+  return data;
+}
+
+export async function EditCabin(id, editedCabin) {
+  const { data, error } = await supabase
+    .from("cabins")
+    .update(editedCabin)
+    .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    throw new Error("cabin could not be edited : " + error.message);
   }
 
   return data;
