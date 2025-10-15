@@ -1,15 +1,14 @@
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
+import useCreateCabin from "./useCreateCabin";
+import useEditCabin from "./useEditCabin";
 
 // const FormRow = styled.div`
 //   display: grid;
@@ -47,32 +46,44 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
-  const queryClient = useQueryClient();
+function CreateCabinForm({ setShowForm, cabin = {} }) {
+  const isEdit = Object.keys(cabin).length !== 0; // to determine whatever the form is used for editing OR adding a cabin
 
-  const { register, handleSubmit, reset, formState, getValues } = useForm();
+  const { id, image: existingImageUrl, ...editValues } = cabin;
+
+  const { register, handleSubmit, reset, formState, getValues } = useForm({
+    defaultValues: isEdit ? editValues : {},
+  });
   const { errors } = formState;
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: createCabin,
-    onSuccess() {
-      toast.success("New Cabin Successfully created!");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-    onError(error) {
-      toast.error(error.message);
-    },
-  });
+  const { mutateCreate, isCreating } = useCreateCabin();
+  const { mutateEdit, isEditing } = useEditCabin();
 
   function onSubmit(data) {
-    console.log(data);
-    console.log(data.image, data.image["0"]);
-    mutate({ ...data, image: data.image["0"] });
+    if (isEdit)
+      mutateEdit(
+        { id, editedCabin: data },
+        {
+          onSuccess: () => {
+            setShowForm(false);
+          },
+        }
+      );
+    else
+      mutateCreate(
+        { ...data, image: data.image["0"] },
+        {
+          onSuccess: () => {
+            reset();
+          },
+        }
+      );
   }
   function onError(error) {
     // console.log(error);
   }
+
+  const isPending = isCreating || isEditing;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -90,7 +101,13 @@ function CreateCabinForm() {
           type="number"
           id="maxCapacity"
           disabled={isPending}
-          {...register("maxCapacity", { required: "this field is required!" })}
+          {...register("maxCapacity", {
+            required: "this field is required!",
+            min: {
+              value: 0,
+              message: "capacity must be positive!",
+            },
+          })}
         />
       </FormRow>
 
@@ -98,13 +115,12 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="regularPrice"
-          defaultValue={0}
           disabled={isPending}
           {...register("regularPrice", {
             required: "this field is required!",
             min: {
               value: 0,
-              message: "regular price should be positive!",
+              message: "regular price must be positive!",
             },
           })}
         />
@@ -114,15 +130,14 @@ function CreateCabinForm() {
         <Input
           type="number"
           id="discount"
-          defaultValue={0}
           disabled={isPending}
           {...register("discount", {
             validate: (value) =>
-              value <= getValues().regularPrice ||
+              +value <= +getValues().regularPrice ||
               "discount must be smaller then regular price",
             min: {
               value: 0,
-              message: "regular price should be positive!",
+              message: "discount must be positive!",
             },
           })}
         />
@@ -136,25 +151,26 @@ function CreateCabinForm() {
           type="number"
           id="description"
           disabled={isPending}
-          defaultValue=""
           {...register("description", { required: "this field is required!" })}
         />
       </FormRow>
 
-      <FormRow label={"Cabin photo"} error={errors?.image?.message}>
-        <FileInput
-          id="image"
-          accept="image/*"
-          {...register("image", { required: "this field is required!" })}
-        />
-      </FormRow>
+      {!existingImageUrl && (
+        <FormRow label={"Cabin photo"} error={errors?.image?.message}>
+          <FileInput
+            id="image"
+            accept="image/*"
+            {...register("image", { required: "this field is required!" })}
+          />
+        </FormRow>
+      )}
 
       <FormRow>
         {/* type is an HTML attribute! */}
         <Button variant="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isPending}>Add cabin</Button>
+        <Button disabled={isPending}>{isEdit ? "edit" : "add"} cabin</Button>
       </FormRow>
     </Form>
   );
