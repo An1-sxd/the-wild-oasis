@@ -46,7 +46,7 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-function CreateCabinForm({ setShowForm, cabin = {} }) {
+function CreateCabinForm({ cabin = {}, onClose }) {
   const isEdit = Object.keys(cabin).length !== 0; // to determine whatever the form is used for editing OR adding a cabin
 
   const { id, image: existingImageUrl, ...editValues } = cabin;
@@ -65,7 +65,7 @@ function CreateCabinForm({ setShowForm, cabin = {} }) {
         { id, editedCabin: data },
         {
           onSuccess: () => {
-            setShowForm(false);
+            onClose?.();
           },
         }
       );
@@ -75,6 +75,7 @@ function CreateCabinForm({ setShowForm, cabin = {} }) {
         {
           onSuccess: () => {
             reset();
+            onClose?.();
           },
         }
       );
@@ -86,7 +87,7 @@ function CreateCabinForm({ setShowForm, cabin = {} }) {
   const isPending = isCreating || isEditing;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onClose ? "modal" : "regular"}>
       <FormRow label={"cabin name"} error={errors?.name?.message}>
         <Input
           type="text"
@@ -167,7 +168,7 @@ function CreateCabinForm({ setShowForm, cabin = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variant="secondary" type="reset">
+        <Button variant="secondary" type="reset" onClick={() => onClose?.()}>
           Cancel
         </Button>
         <Button disabled={isPending}>{isEdit ? "edit" : "add"} cabin</Button>

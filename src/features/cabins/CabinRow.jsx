@@ -55,9 +55,6 @@ function CabinRow({ cabin }) {
   const { mutateDelete, isDeleting } = useDeleteCabin();
   const { mutateCreate, isCreating } = useCreateCabin();
 
-  console.log(cabin);
-  console.log(cabin.image);
-
   return (
     <>
       <TableRow role="row">
