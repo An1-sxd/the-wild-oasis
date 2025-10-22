@@ -1,4 +1,8 @@
+import { createContext } from "react";
 import styled from "styled-components";
+import CabinRow from "../features/cabins/CabinRow";
+import { useContext } from "react";
+import Menus from "./Menus";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -58,3 +62,50 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+const tableContext = createContext();
+
+function Table({ children, columns }) {
+  const value = { columns };
+
+  return (
+    <tableContext.Provider value={value}>
+      <StyledTable role="table">{children}</StyledTable>
+    </tableContext.Provider>
+  );
+}
+
+function Header({ children }) {
+  const { columns } = useContext(tableContext);
+
+  return (
+    <StyledHeader as={"header"} role="row" columns={columns}>
+      {children}
+    </StyledHeader>
+  );
+}
+
+function Row({ children }) {
+  const { columns } = useContext(tableContext);
+
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
+}
+
+function Body({ data, render }) {
+  if (!data.length) return <Empty>no data to show at the moment</Empty>;
+  return (
+    <StyledBody>
+      {data.map((d) => render(d))}
+    </StyledBody>
+  );
+}
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+
+export default Table;

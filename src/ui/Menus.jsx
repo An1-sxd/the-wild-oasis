@@ -1,4 +1,8 @@
+import { createContext, useContext, useState } from "react";
 import styled from "styled-components";
+import Button from "./Button";
+import { HiEllipsisVertical } from "react-icons/hi2";
+import { createPortal } from "react-dom";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -60,3 +64,78 @@ const StyledButton = styled.button`
     transition: all 0.3s;
   }
 `;
+
+const MenuContext = createContext();
+
+function Menus({ children }) {
+  const [openedCabinMenu, setOpenedCabinMenu] = useState(null);
+  const [position, setPosition] = useState({});
+
+  const value = {
+    openedCabin: openedCabinMenu,
+    setOpenedCabinMenu,
+    position,
+    setPosition,
+  };
+
+  return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
+}
+
+function Menu({ children }) {
+  return children;
+}
+
+function Toggle({ id }) {
+  const { openedCabin, setOpenedCabinMenu, setPosition } =
+    useContext(MenuContext);
+
+  function handleClick(e) {
+    const rect = e.target.closest("button").getBoundingClientRect();
+    setPosition({
+      x: window.innerWidth - rect.x - rect.width,
+      y: rect.y + rect.height + 8,
+    });
+
+    if (id === openedCabin) setOpenedCabinMenu(null);
+    else setOpenedCabinMenu(id);
+  }
+
+  return (
+    <StyledToggle variant={"secondary"} onClick={handleClick}>
+      <HiEllipsisVertical />
+    </StyledToggle>
+  );
+}
+
+function List({ children, id }) {
+  const { openedCabin, position } = useContext(MenuContext);
+
+  return (
+    id === openedCabin &&
+    createPortal(
+      <StyledList position={position}>{children}</StyledList>,
+      document.body
+    )
+  );
+}
+
+function Btn({ children, icon, onClick, disabled }) {
+  return (
+    <li>
+      <StyledButton onClick={onClick} disabled={disabled}>
+        {icon}
+        <span>{children}</span>
+      </StyledButton>
+      {/* {children}
+      <span>{type}</span> */}
+    </li>
+  );
+}
+
+Menus.Menu = Menu;
+Menus.Toggle = Toggle;
+Menus.List = List;
+Menus.Btn = Btn;
+
+export default Menus;
+export { MenuContext };
