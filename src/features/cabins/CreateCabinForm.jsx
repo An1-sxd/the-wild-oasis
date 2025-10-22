@@ -87,7 +87,10 @@ function CreateCabinForm({ cabin = {}, onClose }) {
   const isPending = isCreating || isEditing;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)} type={onClose ? "modal" : "regular"}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onClose ? "modal" : "regular"}
+    >
       <FormRow label={"cabin name"} error={errors?.name?.message}>
         <Input
           type="text"

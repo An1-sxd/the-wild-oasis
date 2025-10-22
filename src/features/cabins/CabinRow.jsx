@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { HiTrash, HiPencil } from "react-icons/hi";
 import { HiSquare2Stack } from "react-icons/hi2";
 
@@ -7,18 +6,24 @@ import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
 import useCreateCabin from "./useCreateCabin";
+import EditCabin from "./EditCabin";
+import DeleteCabin from "./DeleteCabin";
+import Table from "../../ui/Table";
+import Menus, { MenuContext } from "../../ui/Menus";
+import { useContext } from "react";
+import Button from "../../ui/Button";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
+// const TableRow = styled.div`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
+//   padding: 1.4rem 2.4rem;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+//   &:not(:last-child) {
+//     border-bottom: 1px solid var(--color-grey-100);
+//   }
+// `;
 
 const Img = styled.img`
   display: block;
@@ -50,25 +55,25 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const { id, name, image, regularPrice, maxCapacity, discount } = cabin;
 
-  const [showForm, setShowForm] = useState(false);
-
   const { mutateDelete, isDeleting } = useDeleteCabin();
   const { mutateCreate, isCreating } = useCreateCabin();
 
+  const { openedCabin, setOpenedCabinMenu } = useContext(MenuContext);
+
   return (
-    <>
-      <TableRow role="row">
-        <Img src={image} />
-        <Cabin>{name}</Cabin>
-        <div>Fits up to {maxCapacity} guests</div>
-        <Price>{formatCurrency(regularPrice)}</Price>
+    <Table.Row role="row" className="cabin-row">
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
 
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
+      {discount ? (
+        <Discount>{formatCurrency(discount)}</Discount>
+      ) : (
+        <span>&mdash;</span>
+      )}
 
+      {/* {id === openedCabin ? (
         <div>
           <button
             onClick={() =>
@@ -85,16 +90,52 @@ function CabinRow({ cabin }) {
           >
             <HiSquare2Stack />
           </button>
-          <button onClick={() => setShowForm((s) => !s)}>
-            <HiPencil />
-          </button>
-          <button onClick={() => mutateDelete(id)} disabled={isDeleting}>
-            <HiTrash />
-          </button>
+          <EditCabin cabin={cabin} />
+          <DeleteCabin
+            cabin={cabin}
+            onConfirm={() => mutateDelete(id)}
+            disabled={isDeleting}
+          />
         </div>
-      </TableRow>
-      {showForm && <CreateCabinForm setShowForm={setShowForm} cabin={cabin} />}
-    </>
+      ) : (
+        <Button variant={"secondary"} onClick={()=>setOpenedCabinMenu(id)}>
+          <HiDotsHorizontal />
+        </Button>
+      )} */}
+      <Menus.Menu>
+        <Menus.Toggle id={id} />
+        <Menus.List id={id}>
+          <Menus.Btn
+            icon={<HiSquare2Stack />}
+            onClick={() =>
+              mutateCreate({
+                name: "copy of : " + name,
+                maxCapacity,
+                regularPrice,
+                discount,
+                description: cabin.description,
+                image,
+              })
+            }
+            disabled={isCreating}
+          >
+            Duplicate
+          </Menus.Btn>
+          <Menus.Btn icon={<HiPencil />}>
+            {/* <EditCabin cabin={cabin} /> */}
+            Edit
+          </Menus.Btn>
+          <Menus.Btn icon={<HiTrash />}>
+            {/* <DeleteCabin
+              cabin={cabin}
+              onConfirm={() => mutateDelete(id)}
+              disabled={isDeleting}
+            /> */}
+            Delete
+          </Menus.Btn>
+        </Menus.List>
+      </Menus.Menu>
+    </Table.Row>
   );
 }
 
