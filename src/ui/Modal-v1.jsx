@@ -1,13 +1,10 @@
 import styled from "styled-components";
-import CreateCabinForm from "../features/cabins/CreateCabinForm";
 import { HiXMark } from "react-icons/hi2";
 import { createPortal } from "react-dom";
 import { createContext } from "react";
 import { useState } from "react";
 import { useContext } from "react";
 import { cloneElement } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
 import useClickDetect from "../features/cabins/useClickDetect";
 
 const StyledModal = styled.div`
@@ -63,39 +60,50 @@ const ModalContext = createContext();
 
 function Modal({ children }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalName, setModalName] = useState("");
 
-  const value = { isOpenModal, setIsOpenModal };
+  const value = { isOpenModal, setIsOpenModal, modalName, setModalName };
 
   return (
     <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
   );
 }
 
-function Open({ children }) {
-  const { setIsOpenModal } = useContext(ModalContext);
+function Open({ children, opens }) {
+  const { setModalName, setIsOpenModal } = useContext(ModalContext);
 
-  return cloneElement(children, { onClick: () => setIsOpenModal(true) });
+  function handleOpenModal(e) {
+    e.stopPropagation();
+    setIsOpenModal(true);
+    setModalName(opens);
+    console.log("modal open clicked");
+  }
+
+  return cloneElement(children, { onClick: handleOpenModal });
 }
 
-function Window({ children }) {
-  const { isOpenModal, setIsOpenModal } = useContext(ModalContext);
+function Window({ children, name }) {
+  const { modalName, isOpenModal, setIsOpenModal } = useContext(ModalContext);
 
   const modalRef = useClickDetect(setIsOpenModal);
 
   if (!isOpenModal) return null;
 
-  return createPortal(
-    <Overlay>
-      <StyledModal ref={modalRef}>
-        <Button onClick={() => setIsOpenModal(false)}>
-          <HiXMark />
-        </Button>
-        {cloneElement(children, {
-          onClose: () => setIsOpenModal(false),
-        })}
-      </StyledModal>
-    </Overlay>,
-    document.body
+  return (
+    modalName === name &&
+    createPortal(
+      <Overlay>
+        <StyledModal ref={modalRef}>
+          <Button onClick={() => setIsOpenModal(false)}>
+            <HiXMark />
+          </Button>
+          {cloneElement(children, {
+            onClose: () => setIsOpenModal(false),
+          })}
+        </StyledModal>
+      </Overlay>,
+      document.body
+    )
   );
 }
 

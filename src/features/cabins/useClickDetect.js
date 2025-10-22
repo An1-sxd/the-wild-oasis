@@ -1,24 +1,23 @@
 import { useRef } from "react";
 import { useEffect } from "react";
 
-function useClickDetect(setIsOpenModal) {
-  const modalRef = useRef();
+function useClickDetect(setState) {
+  const ref = useRef();
 
-  useEffect(
-    function () {
-      function handleClick(e) {
-        if (modalRef.current && !modalRef.current.contains(e.target))
-          setIsOpenModal(false);
+  useEffect(() => {
+    function handleClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        console.log("outside click detect");
+        setState(false);
       }
+    }
 
-      document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick);
 
-      return () => document.removeEventListener("click", handleClick);
-    },
-    [modalRef, setIsOpenModal]
-  );
+    return () => document.removeEventListener("click", handleClick);
+  }, [ref, setState]);
 
-  return modalRef;
+  return ref;
 }
 
 export default useClickDetect;

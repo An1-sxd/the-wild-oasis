@@ -6,12 +6,11 @@ import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
 import useCreateCabin from "./useCreateCabin";
-import EditCabin from "./EditCabin";
-import DeleteCabin from "./DeleteCabin";
 import Table from "../../ui/Table";
 import Menus, { MenuContext } from "../../ui/Menus";
 import { useContext } from "react";
-import Button from "../../ui/Button";
+import Modal from "../../ui/Modal-v1";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 // const TableRow = styled.div`
 //   display: grid;
@@ -61,6 +60,64 @@ function CabinRow({ cabin }) {
   const { openedCabin, setOpenedCabinMenu } = useContext(MenuContext);
 
   return (
+    // <Table.Row role="row" className="cabin-row">
+    //   <Img src={image} />
+    //   <Cabin>{name}</Cabin>
+    //   <div>Fits up to {maxCapacity} guests</div>
+    //   <Price>{formatCurrency(regularPrice)}</Price>
+
+    //   {discount ? (
+    //     <Discount>{formatCurrency(discount)}</Discount>
+    //   ) : (
+    //     <span>&mdash;</span>
+    //   )}
+    //   <Menus.Menu>
+    //     <Menus.Toggle id={id} />
+    //     <Menus.List id={id}>
+    //       <Menus.Btn
+    //         icon={<HiSquare2Stack />}
+    //         onClick={() =>
+    //           mutateCreate({
+    //             name: "copy of : " + name,
+    //             maxCapacity,
+    //             regularPrice,
+    //             discount,
+    //             description: cabin.description,
+    //             image,
+    //           })
+    //         }
+    //         disabled={isCreating}
+    //         setOpenedCabinMenu={setOpenedCabinMenu}
+    //       >
+    //         Duplicate
+    //       </Menus.Btn>
+
+    //       <EditCabin cabin={cabin}>
+    //         <Menus.Btn
+    //           icon={<HiPencil />}
+    //           setOpenedCabinMenu={setOpenedCabinMenu}
+    //         >
+    //           Edit
+    //         </Menus.Btn>
+    //       </EditCabin>
+
+    //       <Menus.Btn
+    //         icon={<HiTrash />}
+    //         onClick={() => mutateDelete(id)}
+    //         disabled={isDeleting}
+    //         setOpenedCabinMenu={setOpenedCabinMenu}
+    //       >
+    //         {/* <DeleteCabin
+    //           cabin={cabin}
+    //           onConfirm={() => mutateDelete(id)}
+    //           disabled={isDeleting}
+    //         /> */}
+    //         Delete
+    //       </Menus.Btn>
+    //     </Menus.List>
+    //   </Menus.Menu>
+    // </Table.Row>
+
     <Table.Row role="row" className="cabin-row">
       <Img src={image} />
       <Cabin>{name}</Cabin>
@@ -73,68 +130,70 @@ function CabinRow({ cabin }) {
         <span>&mdash;</span>
       )}
 
-      {/* {id === openedCabin ? (
-        <div>
-          <button
-            onClick={() =>
-              mutateCreate({
-                name: "copy of : " + name,
-                maxCapacity,
-                regularPrice,
-                discount,
-                description: cabin.description,
-                image,
-              })
-            }
-            disabled={isCreating}
-          >
-            <HiSquare2Stack />
-          </button>
-          <EditCabin cabin={cabin} />
-          <DeleteCabin
-            cabin={cabin}
-            onConfirm={() => mutateDelete(id)}
-            disabled={isDeleting}
-          />
-        </div>
-      ) : (
-        <Button variant={"secondary"} onClick={()=>setOpenedCabinMenu(id)}>
-          <HiDotsHorizontal />
-        </Button>
-      )} */}
-      <Menus.Menu>
-        <Menus.Toggle id={id} />
-        <Menus.List id={id}>
-          <Menus.Btn
-            icon={<HiSquare2Stack />}
-            onClick={() =>
-              mutateCreate({
-                name: "copy of : " + name,
-                maxCapacity,
-                regularPrice,
-                discount,
-                description: cabin.description,
-                image,
-              })
-            }
-            disabled={isCreating}
-          >
-            Duplicate
-          </Menus.Btn>
-          <Menus.Btn icon={<HiPencil />}>
-            {/* <EditCabin cabin={cabin} /> */}
-            Edit
-          </Menus.Btn>
-          <Menus.Btn icon={<HiTrash />}>
-            {/* <DeleteCabin
+      <div id="menu">
+        <Modal>
+          {/* Menu */}
+          <Menus.Menu>
+            <Menus.Toggle id={id} />
+            <Menus.List id={id}>
+              {/* duplicate */}
+              <Menus.Btn
+                icon={<HiSquare2Stack />}
+                onClick={() =>
+                  mutateCreate({
+                    name: "copy of : " + name,
+                    maxCapacity,
+                    regularPrice,
+                    discount,
+                    description: cabin.description,
+                    image,
+                  })
+                }
+                disabled={isCreating}
+                setOpenedCabinMenu={setOpenedCabinMenu}
+              >
+                Duplicate
+              </Menus.Btn>
+
+              {/* edit */}
+              <Modal.Open opens={"edit"}>
+                <Menus.Btn
+                  icon={<HiPencil />}
+                  setOpenedCabinMenu={setOpenedCabinMenu}
+                >
+                  Edit
+                </Menus.Btn>
+              </Modal.Open>
+              {/* delete */}
+              <Modal.Open opens={"delete"}>
+                <Menus.Btn
+                  icon={<HiTrash />}
+                  setOpenedCabinMenu={setOpenedCabinMenu}
+                >
+                  Delete
+                </Menus.Btn>
+              </Modal.Open>
+            </Menus.List>
+          </Menus.Menu>
+          {/* Menu */}
+
+          {/* edit modal */}
+          <Modal.Window name={"edit"}>
+            <CreateCabinForm cabin={cabin} />
+          </Modal.Window>
+          {/* edit modal */}
+
+          {/* delete modal */}
+          <Modal.Window name={"delete"}>
+            <ConfirmDelete
               cabin={cabin}
               onConfirm={() => mutateDelete(id)}
               disabled={isDeleting}
-            /> */}
-            Delete
-          </Menus.Btn>
-        </Menus.List>
-      </Menus.Menu>
+            />
+          </Modal.Window>
+          {/* delete modal */}
+        </Modal>
+      </div>
     </Table.Row>
   );
 }

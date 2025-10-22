@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import styled from "styled-components";
-import Button from "./Button";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import { createPortal } from "react-dom";
+import useClickDetect from "../features/cabins/useClickDetect";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -90,14 +90,21 @@ function Toggle({ id }) {
     useContext(MenuContext);
 
   function handleClick(e) {
+    console.log("menu click");
+    e.stopPropagation();
+
     const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.x - rect.width,
       y: rect.y + rect.height + 8,
     });
 
-    if (id === openedCabin) setOpenedCabinMenu(null);
-    else setOpenedCabinMenu(id);
+    if (id === openedCabin) {
+      console.log("test");
+      setOpenedCabinMenu(null);
+    } else {
+      setOpenedCabinMenu(id);
+    }
   }
 
   return (
@@ -108,26 +115,33 @@ function Toggle({ id }) {
 }
 
 function List({ children, id }) {
-  const { openedCabin, position } = useContext(MenuContext);
+  const { openedCabin, setOpenedCabinMenu, position } = useContext(MenuContext);
+
+  const MenuRef = useClickDetect(setOpenedCabinMenu);
 
   return (
     id === openedCabin &&
     createPortal(
-      <StyledList position={position}>{children}</StyledList>,
+      <StyledList ref={MenuRef} position={position}>
+        {children}
+      </StyledList>,
       document.body
     )
   );
 }
 
-function Btn({ children, icon, onClick, disabled }) {
+function Btn({ children, icon, onClick, disabled, setOpenedCabinMenu }) {
+  function handleClick(e) {
+    onClick?.(e);
+    setOpenedCabinMenu(false);
+    console.log("menu btn clicked");
+  }
   return (
     <li>
-      <StyledButton onClick={onClick} disabled={disabled}>
+      <StyledButton onClick={handleClick} disabled={disabled}>
         {icon}
         <span>{children}</span>
       </StyledButton>
-      {/* {children}
-      <span>{type}</span> */}
     </li>
   );
 }
