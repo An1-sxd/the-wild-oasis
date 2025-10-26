@@ -28,14 +28,17 @@ export async function createCabin(newCabin) {
 
   let imagePath;
 
-  const imageName = `${Date.now()}-${newCabin.image.name}`.replaceAll("/", "");
-  // <<unique>> name (avoid collisions) + <<replace>> all slashes (/) so supabase doesn't create foldres instead !
-
   if (hasImagePath) {
     // if image exists in db
     imagePath = newCabin.image;
   } else {
     // if image doesn't exist in db
+
+    const imageName = `${Date.now()}-${newCabin.image.name}`.replaceAll(
+      "/",
+      ""
+    );
+    // <<unique>> name (avoid collisions) + <<replace>> all slashes (/) so supabase doesn't create foldres instead !
 
     // 1. Upload the image file to Supabase Storage
     const { error: storageError } = await supabase.storage
