@@ -36,7 +36,7 @@ const FilterButton = styled.button`
   }
 `;
 
-function Filter({ filterField = "discount", options }) {
+function Filter({ filterField, filterOptions }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handleClick(value) {
@@ -44,15 +44,16 @@ function Filter({ filterField = "discount", options }) {
     setSearchParams(searchParams);
   }
 
-  const cabinFilter = searchParams.get(filterField) || options[0].value;
+  const cabinFilter = searchParams.get(filterField) || filterOptions[0].value;
 
   return (
     <StyledFilter>
-      {options.map((op) => (
+      {filterOptions.map((op) => (
         <FilterButton
           key={op.value}
-          active={cabinFilter === op.value && true}
           onClick={() => handleClick(op.value)}
+          active={cabinFilter === op.value && true}
+          disabled={cabinFilter === op.value && true}
         >
           {op.label}
         </FilterButton>

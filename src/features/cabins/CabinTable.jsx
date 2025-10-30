@@ -30,9 +30,11 @@ import { useSearchParams } from "react-router-dom";
 // `;
 
 function CabinTable() {
-  const { isPending, cabins } = useCabins();
+  const { isPending, cabins = [] } = useCabins();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // 1️⃣_ ::Filtering::
 
   const cabinFilter = searchParams.get("discount") || "all";
 
@@ -42,6 +44,38 @@ function CabinTable() {
       : cabinFilter === "no-discount"
       ? cabins.filter((cabin) => cabin.discount === 0)
       : cabins.filter((cabin) => cabin.discount !== 0);
+
+  // 2️⃣_ ::Sorting::
+
+  const cabinSortBy = searchParams.get("sortBy") || "name-asc";
+
+  // const sortedCabins = [...filteredCabins].sort((cabin1, cabin2) => {
+  //   switch (cabinSortBy) {
+  //     case "name-asc":
+  //       return cabin1.name.localeCompare(cabin2.name);
+  //     case "name-disc":
+  //       return cabin2.name.localeCompare(cabin1.name);
+  //     case "price-asc":
+  //       return cabin1.regularPrice - cabin2.regularPrice;
+  //     case "price-disc":
+  //       return cabin2.regularPrice - cabin1.regularPrice;
+  //     case "capacity-asc":
+  //       return cabin1.maxCapacity - cabin2.maxCapacity;
+  //     case "capacity-disc":
+  //       return cabin2.maxCapacity - cabin1.maxCapacity;
+  //     default:
+  //       return filteredCabins;
+  //   }
+  // });
+
+  // 2️⃣_ ::better Sorting Logic::
+
+  const [field, direction] = cabinSortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+
+  const sortedCabins = [...filteredCabins].sort(
+    (cabin1, cabin2) => (cabin1[field] - cabin2[field]) * modifier // by ignoring case of <<name>> is <<String>> (copy of : 001)
+  );
 
   if (isPending) return <Spinner />;
 
@@ -72,7 +106,7 @@ function CabinTable() {
           <div>discount</div>
         </Table.Header>
         <Table.Body
-          data={filteredCabins}
+          data={sortedCabins}
           render={(cabin) => <CabinRow key={cabin.id} cabin={cabin} />}
         ></Table.Body>
       </Table>
