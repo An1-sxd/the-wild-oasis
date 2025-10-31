@@ -36,7 +36,7 @@ const FilterButton = styled.button`
   }
 `;
 
-function Filter({ filterField, filterOptions }) {
+function Filter({ filterField, options }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handleClick(value) {
@@ -44,11 +44,11 @@ function Filter({ filterField, filterOptions }) {
     setSearchParams(searchParams);
   }
 
-  const cabinFilter = searchParams.get(filterField) || filterOptions[0].value;
+  const cabinFilter = searchParams.get(filterField) || options[0].value;
 
   return (
     <StyledFilter>
-      {filterOptions.map((op) => (
+      {options.map((op) => (
         <FilterButton
           key={op.value}
           onClick={() => handleClick(op.value)}

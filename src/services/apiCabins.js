@@ -1,8 +1,8 @@
-import supabase from "../../supabase";
+import supabase from "./supabase";
 const supabaseUrl = "https://sqyfnfdqixejekchzicd.supabase.co/";
 
 export async function getCabins() {
-  let { data: cabins, error } = await supabase.from("cabins").select("*");
+  const { data: cabins, error } = await supabase.from("cabins").select("*");
 
   if (error) {
     console.log(error);
@@ -42,7 +42,7 @@ export async function createCabin(newCabin) {
 
     // 1. Upload the image file to Supabase Storage
     const { error: storageError } = await supabase.storage
-      .from("cabins-images") // 👈 your bucket name
+      .from("cabin-images") // 👈 your bucket name
       .upload(imageName, newCabin.image);
 
     if (storageError) {
@@ -52,7 +52,7 @@ export async function createCabin(newCabin) {
 
     // 2. Get public URL after upload succeeds
     const { data: publicUrlData } = supabase.storage
-      .from("cabins-images")
+      .from("cabin-images")
       .getPublicUrl(imageName);
 
     imagePath = publicUrlData.publicUrl;

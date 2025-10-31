@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
 import Select from "./Select";
 
-function SortBy({ sortField, sortOptions }) {
+function SortBy({ options }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handleClick(e) {
-    searchParams.set(sortField, e.target.value);
+    searchParams.set("sortBy", e.target.value);
     setSearchParams(searchParams);
   }
 
@@ -14,7 +14,7 @@ function SortBy({ sortField, sortOptions }) {
   return (
     <Select
       type={"white"}
-      sortOptions={sortOptions}
+      options={options}
       value={cabinSortBy}
       onChange={handleClick}
     />

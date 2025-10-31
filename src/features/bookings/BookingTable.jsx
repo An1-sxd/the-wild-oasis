@@ -1,9 +1,25 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
+import useBookings from "./useBookings";
+import Spinner from "../../ui/Spinner";
 // import Menus from "../../ui/Menus";
 
 function BookingTable() {
-  const bookings = [];
+  const { isPending, bookings = [] } = useBookings();
+
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  // // 1️⃣_ ::Filtering::
+
+  // const bookingFilter = searchParams.get("status") || "all";
+
+  // const filteredBookings =
+  //   bookingFilter === "all"
+  //     ? bookings
+  //     : bookings.filter((booking) => booking.status === bookingFilter); 
+  //     // <<filter>> by **bookingFilter (status)** i get from <<url>>
+
+  if (isPending) return <Spinner />;
 
   return (
     // <Menus>

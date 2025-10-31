@@ -12,10 +12,10 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-function Select({ sortOptions, onChange, value, ...props }) {
+function Select({ options, onChange, value, ...props }) {
   return (
     <StyledSelect value={value} onChange={onChange} {...props}>
-      {sortOptions.map((op) => (
+      {options.map((op) => (
         <option key={op.value} value={op.value}>
           {op.label}
         </option>

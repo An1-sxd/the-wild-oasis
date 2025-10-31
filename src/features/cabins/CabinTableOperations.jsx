@@ -24,8 +24,8 @@ function CabinTableOperations() {
 
   return (
     <TableOperations>
-      <Filter filterField={filterField} filterOptions={filterOptions} />
-      <SortBy sortField={sortField} sortOptions={sortOptions} />
+      <Filter filterField={filterField} options={filterOptions} />
+      <SortBy sortField={sortField} options={sortOptions} />
     </TableOperations>
   );
 }

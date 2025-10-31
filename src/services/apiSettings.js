@@ -1,14 +1,17 @@
-import supabase from "../../supabase";
+import supabase from "./supabase";
 
 export async function getSettings() {
-  const { data, error } = await supabase.from("settings").select("*").single();
+  const { data: settings, error } = await supabase
+    .from("settings")
+    .select("*")
+    .single();
   // **single()**
 
   if (error) {
     console.error(error);
     throw new Error("Settings could not be loaded");
   }
-  return data;
+  return settings;
 }
 
 // We expect a newSetting object that looks like {setting: newValue}
