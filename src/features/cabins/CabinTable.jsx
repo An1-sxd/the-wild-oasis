@@ -34,18 +34,18 @@ function CabinTable() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 1️⃣_ ::Filtering::
+  // 1️⃣_ ::Client-Side Filtering::
 
   const cabinFilter = searchParams.get("discount") || "all";
 
-  const filteredCabins =
+  const filteredCabins = 
     cabinFilter === "all"
       ? cabins
       : cabinFilter === "no-discount"
       ? cabins.filter((cabin) => cabin.discount === 0)
       : cabins.filter((cabin) => cabin.discount !== 0);
 
-  // 2️⃣_ ::Sorting::
+  // 2️⃣_ ::Client-Side Sorting::
 
   const cabinSortBy = searchParams.get("sortBy") || "name-asc";
 

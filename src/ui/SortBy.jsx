@@ -9,13 +9,13 @@ function SortBy({ options }) {
     setSearchParams(searchParams);
   }
 
-  const cabinSortBy = searchParams.get("sortBy") || "name-asc";
+  const sortByValue = searchParams.get("sortBy") || "name-asc";
 
   return (
     <Select
       type={"white"}
       options={options}
-      value={cabinSortBy}
+      value={sortByValue}
       onChange={handleClick}
     />
   );

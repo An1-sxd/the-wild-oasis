@@ -44,7 +44,7 @@ function Filter({ filterField, options }) {
     setSearchParams(searchParams);
   }
 
-  const cabinFilter = searchParams.get(filterField) || options[0].value;
+  const filterValue = searchParams.get(filterField) || options[0].value;
 
   return (
     <StyledFilter>
@@ -52,8 +52,8 @@ function Filter({ filterField, options }) {
         <FilterButton
           key={op.value}
           onClick={() => handleClick(op.value)}
-          active={cabinFilter === op.value && true}
-          disabled={cabinFilter === op.value && true}
+          active={filterValue === op.value && true}
+          disabled={filterValue === op.value && true}
         >
           {op.label}
         </FilterButton>

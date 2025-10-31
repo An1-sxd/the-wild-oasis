@@ -2,15 +2,20 @@ import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 export async function getBookings({ filter, sort }) {
-  // console.log(bookingFilter)
   let query = supabase.from("bookings").select("*,cabins(*), guests(*) ");
 
-  if (filter) query = query[filter.method || 'eq'](filter.field, filter.value);
+  // :: 1_ API-Side Filtering ::
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
   // filter.map((ft) => {
   //   if (!ft) return;
   //   query = query[ft.method || "eq"](ft.field, ft.value);
   // });
+
+  // :: 2_ API-Side Sorting ::
+  query = query.order(sort.field, { ascending: sort.order });
+
+  //
 
   const { data: bookings, error } = await query;
 
