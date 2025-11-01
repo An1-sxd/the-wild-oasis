@@ -44,7 +44,7 @@ const StyledBody = styled.section`
   margin: 0.4rem 0;
 `;
 
-const Footer = styled.footer`
+const StyledFooter = styled.footer`
   background-color: var(--color-grey-50);
   display: flex;
   justify-content: center;
@@ -100,8 +100,13 @@ function Body({ data = [], render }) {
   return <StyledBody>{data.map((d) => render(d))}</StyledBody>;
 }
 
+function Footer({ children }) {
+  return <StyledFooter>{children}</StyledFooter>;
+}
+
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;
+Table.Footer = Footer;
 
 export default Table;

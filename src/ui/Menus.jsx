@@ -68,12 +68,12 @@ const StyledButton = styled.button`
 const MenuContext = createContext();
 
 function Menus({ children }) {
-  const [openedCabinMenu, setOpenedCabinMenu] = useState(null);
+  const [openedItemMenu, setOpenedItemMenu] = useState(null);
   const [position, setPosition] = useState({});
 
   const value = {
-    openedCabin: openedCabinMenu,
-    setOpenedCabinMenu,
+    openedItem: openedItemMenu,
+    setOpenedItemMenu,
     position,
     setPosition,
   };
@@ -86,7 +86,7 @@ function Menu({ children }) {
 }
 
 function Toggle({ id }) {
-  const { openedCabin, setOpenedCabinMenu, setPosition } =
+  const { openedItem, setOpenedItemMenu, setPosition } =
     useContext(MenuContext);
 
   function handleClick(e) {
@@ -94,16 +94,17 @@ function Toggle({ id }) {
     e.stopPropagation();
 
     const rect = e.target.closest("button").getBoundingClientRect();
+    
     setPosition({
       x: window.innerWidth - rect.x - rect.width,
       y: rect.y + rect.height + 8,
     });
 
-    if (id === openedCabin) {
+    if (id === openedItem) {
       console.log("test");
-      setOpenedCabinMenu(null);
+      setOpenedItemMenu(null);
     } else {
-      setOpenedCabinMenu(id);
+      setOpenedItemMenu(id);
     }
   }
 
@@ -115,12 +116,12 @@ function Toggle({ id }) {
 }
 
 function List({ children, id }) {
-  const { openedCabin, setOpenedCabinMenu, position } = useContext(MenuContext);
+  const { openedItem, setOpenedItemMenu, position } = useContext(MenuContext);
 
-  const MenuRef = useClickDetect(setOpenedCabinMenu);
+  const MenuRef = useClickDetect(setOpenedItemMenu);
 
   return (
-    id === openedCabin &&
+    id === openedItem &&
     createPortal(
       <StyledList ref={MenuRef} position={position}>
         {children}
@@ -130,10 +131,10 @@ function List({ children, id }) {
   );
 }
 
-function Btn({ children, icon, onClick, disabled, setOpenedCabinMenu }) {
+function Btn({ children, icon, onClick, disabled, setOpenedItemMenu }) {
   function handleClick(e) {
     onClick?.(e);
-    setOpenedCabinMenu(false);
+    setOpenedItemMenu(false);
     console.log("menu btn clicked");
   }
   return (

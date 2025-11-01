@@ -57,7 +57,7 @@ function CabinRow({ cabin }) {
   const { mutateDelete, isDeleting } = useDeleteCabin();
   const { mutateCreate, isCreating } = useCreateCabin();
 
-  const { openedCabin, setOpenedCabinMenu } = useContext(MenuContext);
+  const { setOpenedItemMenu } = useContext(MenuContext);
 
   return (
     // <Table.Row role="row" className="cabin-row">
@@ -87,7 +87,7 @@ function CabinRow({ cabin }) {
     //           })
     //         }
     //         disabled={isCreating}
-    //         setOpenedCabinMenu={setOpenedCabinMenu}
+    //         setOpenedItemMenu={setOpenedItemMenu}
     //       >
     //         Duplicate
     //       </Menus.Btn>
@@ -95,7 +95,7 @@ function CabinRow({ cabin }) {
     //       <EditCabin cabin={cabin}>
     //         <Menus.Btn
     //           icon={<HiPencil />}
-    //           setOpenedCabinMenu={setOpenedCabinMenu}
+    //           setOpenedItemMenu={setOpenedItemMenu}
     //         >
     //           Edit
     //         </Menus.Btn>
@@ -105,7 +105,7 @@ function CabinRow({ cabin }) {
     //         icon={<HiTrash />}
     //         onClick={() => mutateDelete(id)}
     //         disabled={isDeleting}
-    //         setOpenedCabinMenu={setOpenedCabinMenu}
+    //         setOpenedItemMenu={setOpenedItemMenu}
     //       >
     //         {/* <DeleteCabin
     //           cabin={cabin}
@@ -150,7 +150,7 @@ function CabinRow({ cabin }) {
                   })
                 }
                 disabled={isCreating}
-                setOpenedCabinMenu={setOpenedCabinMenu}
+                setOpenedItemMenu={setOpenedItemMenu}
               >
                 Duplicate
               </Menus.Btn>
@@ -159,7 +159,7 @@ function CabinRow({ cabin }) {
               <Modal.Open opens={"edit"}>
                 <Menus.Btn
                   icon={<HiPencil />}
-                  setOpenedCabinMenu={setOpenedCabinMenu}
+                  setOpenedItemMenu={setOpenedItemMenu}
                 >
                   Edit
                 </Menus.Btn>
@@ -168,7 +168,7 @@ function CabinRow({ cabin }) {
               <Modal.Open opens={"delete"}>
                 <Menus.Btn
                   icon={<HiTrash />}
-                  setOpenedCabinMenu={setOpenedCabinMenu}
+                  setOpenedItemMenu={setOpenedItemMenu}
                 >
                   Delete
                 </Menus.Btn>

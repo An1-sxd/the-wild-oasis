@@ -6,6 +6,11 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import Menus, { MenuContext } from "../../ui/Menus";
+import { HiSquare2Stack } from "react-icons/hi2";
+import { useContext } from "react";
+import { HiEye } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -34,8 +39,8 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+function BookingRow({ booking }) {
+  const {
     id: bookingId,
     created_at,
     startDate,
@@ -46,13 +51,17 @@ function BookingRow({
     status,
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
-  },
-}) {
+  } = booking;
+
+  const navigate = useNavigate();
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
     "checked-out": "silver",
   };
+
+  const { setOpenedItemMenu } = useContext(MenuContext);
 
   return (
     <Table.Row>
@@ -67,7 +76,7 @@ function BookingRow({
         <span>
           {isToday(new Date(startDate))
             ? "Today"
-            : formatDistanceFromNow(startDate)}{" "}
+            : formatDistanceFromNow(startDate)}
           &rarr; {numNights} night stay
         </span>
         <span>
@@ -79,6 +88,35 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+
+      <div id="menu">
+        <Menus.Menu>
+          <Menus.Toggle id={bookingId} />
+          <Menus.List id={bookingId}>
+            <Menus.Btn
+              icon={<HiEye />}
+              setOpenedItemMenu={setOpenedItemMenu}
+              onClick={() => navigate(`/bookings/${bookingId}`)}
+            >
+              See Details
+            </Menus.Btn>
+            <Menus.Btn
+              icon={<HiSquare2Stack />}
+              setOpenedItemMenu={setOpenedItemMenu}
+              onClick={() => console.log("btn clicked")}
+            >
+              Check In
+            </Menus.Btn>
+            <Menus.Btn
+              icon={<HiSquare2Stack />}
+              setOpenedItemMenu={setOpenedItemMenu}
+              onClick={() => console.log("btn clicked")}
+            >
+              Delete Booking
+            </Menus.Btn>
+          </Menus.List>
+        </Menus.Menu>
+      </div>
     </Table.Row>
   );
 }
