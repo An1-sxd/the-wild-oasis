@@ -87,7 +87,7 @@ function CabinRow({ cabin }) {
     //           })
     //         }
     //         disabled={isCreating}
-    //         setOpenedItemMenu={setOpenedItemMenu}
+    //
     //       >
     //         Duplicate
     //       </Menus.Btn>
@@ -95,7 +95,7 @@ function CabinRow({ cabin }) {
     //       <EditCabin cabin={cabin}>
     //         <Menus.Btn
     //           icon={<HiPencil />}
-    //           setOpenedItemMenu={setOpenedItemMenu}
+    //
     //         >
     //           Edit
     //         </Menus.Btn>
@@ -105,7 +105,7 @@ function CabinRow({ cabin }) {
     //         icon={<HiTrash />}
     //         onClick={() => mutateDelete(id)}
     //         disabled={isDeleting}
-    //         setOpenedItemMenu={setOpenedItemMenu}
+    //
     //       >
     //         {/* <DeleteCabin
     //           cabin={cabin}
@@ -150,28 +150,17 @@ function CabinRow({ cabin }) {
                   })
                 }
                 disabled={isCreating}
-                setOpenedItemMenu={setOpenedItemMenu}
               >
                 Duplicate
               </Menus.Btn>
 
               {/* edit */}
               <Modal.Open opens={"edit"}>
-                <Menus.Btn
-                  icon={<HiPencil />}
-                  setOpenedItemMenu={setOpenedItemMenu}
-                >
-                  Edit
-                </Menus.Btn>
+                <Menus.Btn icon={<HiPencil />}>Edit</Menus.Btn>
               </Modal.Open>
               {/* delete */}
               <Modal.Open opens={"delete"}>
-                <Menus.Btn
-                  icon={<HiTrash />}
-                  setOpenedItemMenu={setOpenedItemMenu}
-                >
-                  Delete
-                </Menus.Btn>
+                <Menus.Btn icon={<HiTrash />}>Delete</Menus.Btn>
               </Modal.Open>
             </Menus.List>
           </Menus.Menu>
@@ -186,7 +175,7 @@ function CabinRow({ cabin }) {
           {/* delete modal */}
           <Modal.Window name={"delete"}>
             <ConfirmDelete
-              cabin={cabin}
+              resourceName={"cabin"}
               onConfirm={() => mutateDelete(id)}
               disabled={isDeleting}
             />
