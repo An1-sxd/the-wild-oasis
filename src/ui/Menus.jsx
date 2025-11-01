@@ -94,7 +94,7 @@ function Toggle({ id }) {
     e.stopPropagation();
 
     const rect = e.target.closest("button").getBoundingClientRect();
-    
+
     setPosition({
       x: window.innerWidth - rect.x - rect.width,
       y: rect.y + rect.height + 8,
@@ -131,7 +131,9 @@ function List({ children, id }) {
   );
 }
 
-function Btn({ children, icon, onClick, disabled, setOpenedItemMenu }) {
+function Btn({ children, icon, onClick, disabled }) {
+  const { setOpenedItemMenu } = useContext(MenuContext);
+
   function handleClick(e) {
     onClick?.(e);
     setOpenedItemMenu(false);

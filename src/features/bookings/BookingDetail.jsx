@@ -10,8 +10,12 @@ import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
 import useBooking from "./useBooking";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
+import useCheckout from "../check-in-out/useCheckout";
+import useDeleteBooking from "../check-in-out/useDeleteBooking";
+import Modal from "../../ui/Modal-v1";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -20,8 +24,11 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
+  const navigate = useNavigate();
   let { bookingId } = useParams();
   bookingId = +bookingId;
+  const { checkout, isCheckingOut } = useCheckout();
+  const { removeBooking, isRemovingBooking } = useDeleteBooking();
 
   const moveBack = useMoveBack();
 
@@ -50,7 +57,36 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
-        <Button variation="secondary" onClick={moveBack}>
+        {status === "unconfirmed" && (
+          <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+            Check In
+          </Button>
+        )}
+
+        {status === "checked-in" && (
+          <Button onClick={() => checkout(bookingId)} disabled={isCheckingOut}>
+            Check Out
+          </Button>
+        )}
+
+        <Modal>
+          <Modal.Open opens={"delete"}>
+            <Button variant={"danger"}>Delete Booking</Button>
+          </Modal.Open>
+          <Modal.Window name={"delete"}>
+            <ConfirmDelete
+              resourceName={"booking"}
+              onConfirm={() =>
+                removeBooking(bookingId, {
+                  onSuccess: () => navigate(-1),
+                })
+              }
+              disabled={isRemovingBooking}
+            />
+          </Modal.Window>
+        </Modal>
+
+        <Button variant="secondary" onClick={moveBack}>
           Back
         </Button>
       </ButtonGroup>
