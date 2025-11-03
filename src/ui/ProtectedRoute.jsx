@@ -18,6 +18,8 @@ function ProtectedRoute({ children }) {
   // ::1_ Load The Authenticated User::
   const { user, isGettingUser, isAuthenticated } = useUser();
 
+  // ##step 2 and 3 should be swapped , but since hooks (useEffect) cannot be called conditionally, so they're like this : ##
+
   // ::2_ if There Is No Authenticated User , Return To Login Page::
   useEffect(() => {
     if (!isAuthenticated && !isGettingUser) navigate("/login"); // we used useEffect , because : <<navigating>> during <<render>> is a <<bad>> pattern

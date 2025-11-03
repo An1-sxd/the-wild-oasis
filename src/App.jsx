@@ -21,10 +21,12 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // staleTime: 60 * 1000,
+      staleTime: 0, // or keep at 60 * 1000 for other queries
+      refetchOnWindowFocus: true, // This is already the default
+      retry: false, // For auth-related queries
     },
   },
 });
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
