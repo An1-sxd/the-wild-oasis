@@ -50,6 +50,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/users" element={<Users />} />
             <Route path="/cabins" element={<Cabins />} />
+            <Route path="/account" element={<Account />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />

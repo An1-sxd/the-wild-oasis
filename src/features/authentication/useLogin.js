@@ -11,7 +11,7 @@ function useLogin() {
     mutationFn: ({ email, password }) => loginApi({ email, password }),
 
     onSuccess: (user) => {
-      console.log(user.user); // here the <<user infos>>
+      // console.log(user.user); // here the <<user infos>>
 
       queryClient.setQueriesData({ queryKey: ["user"] }, user.user);
       // queryClient.setQueryData(["user"], user.user);

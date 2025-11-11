@@ -27,7 +27,7 @@ function useUser() {
   });
 
 
-  console.log("useUser:", { user, isGettingUser, isAuthenticated: user?.role === "authenticated" });
+  // console.log("useUser:", { user, isGettingUser, isAuthenticated: user?.role === "authenticated" });
 
   return {
     user,
