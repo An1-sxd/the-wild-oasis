@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import SideBar from "./SideBar";
 import Header from "./Header";
+import { DarkModeProvider } from "../contexts/darkModeContext";
 
 const StyledAppLayout = styled.div`
   display: grid;
@@ -18,11 +19,11 @@ const Main = styled.main`
 `;
 
 const Container = styled.div`
-max-width: 120rem;
-margin: 0 auto;
-display: flex;
-flex-direction: column;
-gap: 3.2rem;
+  max-width: 120rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
 `;
 
 function AppLayout() {

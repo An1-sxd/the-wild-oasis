@@ -10,7 +10,7 @@ function useUpdateUser() {
       updateCurrentUser({ fullName, password, avatar }),
     onSuccess({ user }) {
       toast.success("user account successfully updated!");
-      // queryClient.setQueryData("user", user);
+      queryClient.setQueryData(["user"], user);
 
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
