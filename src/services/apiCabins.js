@@ -23,22 +23,23 @@ export async function deleteCabin(id) {
 }
 
 export async function createCabin(newCabin) {
-  // if image already exists in db
-  const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
+  // 0_naming the file: 
+    // if image already exists in db
+    const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
-  let imagePath;
+    let imagePath;
 
-  if (hasImagePath) {
-    // if image exists in db
-    imagePath = newCabin.image;
-  } else {
-    // if image doesn't exist in db
+    if (hasImagePath) {
+      // if image exists in db
+      imagePath = newCabin.image;
+    } else {
+      // if image doesn't exist in db
 
-    const imageName = `${Date.now()}-${newCabin.image.name}`.replaceAll(
-      "/",
-      ""
-    );
-    // <<unique>> name (avoid collisions) + <<replace>> all slashes (/) so supabase doesn't create foldres instead !
+      const imageName = `${Date.now()}-${newCabin.image.name}`.replaceAll(
+        "/",
+        ""
+      );
+      // <<unique>> name (avoid collisions) + <<replace>> all slashes (/) so supabase doesn't create foldres instead !
 
     // 1. Upload the image file to Supabase Storage
     const { error: storageError } = await supabase.storage
