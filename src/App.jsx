@@ -6,18 +6,18 @@ import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import Login from "./pages/Login";
 import Cabins from "./pages/Cabins";
+import Booking from "./pages/Booking";
+import Checkin from "./pages/Checkin";
 import PageNotFound from "./pages/PageNotFound";
+import AppLayout from "./ui/AppLayout";
+import ProtectedRoute from "./ui/ProtectedRoute";
+import { DarkModeProvider } from "./contexts/darkModeContext";
 
 import GlobalStyles from "./styles/GlobalStyles";
-import AppLayout from "./ui/AppLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
-import Booking from "./pages/Booking";
-import Checkin from "./pages/checkin";
-import ProtectedRoute from "./ui/ProtectedRoute";
 
-import { DarkModeProvider } from "./contexts/darkModeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
