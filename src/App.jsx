@@ -11,13 +11,12 @@ import Checkin from "./pages/Checkin";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
-import { DarkModeProvider } from "./contexts/darkModeContext";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
-
+import { DarkModeProvider } from "./contexts/darkModeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
