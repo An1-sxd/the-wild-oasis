@@ -32,7 +32,7 @@ import { useSearchParams } from "react-router-dom";
 function CabinTable() {
   const { isPending, cabins = [] } = useCabins();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // 1️⃣_ ::Client-Side Filtering::
 

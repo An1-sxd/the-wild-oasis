@@ -5,7 +5,7 @@ function useSettings() {
   const {
     data: settings,
     isPending,
-    error,
+    // error,
   } = useQuery({
     queryKey: ["settings"],
     queryFn: getSettings,

@@ -26,7 +26,7 @@ function SignupForm() {
     );
   }
 
-  function onNotValid(errors) {}
+  function onNotValid() {}
 
   return (
     <Form onSubmit={handleSubmit(onValid, onNotValid)}>

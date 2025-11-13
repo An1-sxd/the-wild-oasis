@@ -5,7 +5,7 @@ function useCabins() {
   const {
     data: cabins,
     isPending,
-    error,
+    // error,
   } = useQuery({
     queryKey: ["cabins"],
     queryFn: getCabins, //promise

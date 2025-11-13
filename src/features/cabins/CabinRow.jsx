@@ -7,8 +7,7 @@ import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
 import useCreateCabin from "./useCreateCabin";
 import Table from "../../ui/Table";
-import Menus, { MenuContext } from "../../ui/Menus";
-import { useContext } from "react";
+import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal-v1";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 
@@ -56,8 +55,6 @@ function CabinRow({ cabin }) {
 
   const { mutateDelete, isDeleting } = useDeleteCabin();
   const { mutateCreate, isCreating } = useCreateCabin();
-
-  const { setOpenedItemMenu } = useContext(MenuContext);
 
   return (
     // <Table.Row role="row" className="cabin-row">

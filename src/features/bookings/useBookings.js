@@ -5,7 +5,7 @@ import { PAGE_SIZE } from "../../utils/constants";
 
 function useBookings() {
   const queryClient = useQueryClient();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // 1️⃣_ ::API-Side Filtering::
 
@@ -38,7 +38,7 @@ function useBookings() {
   const {
     data: { data: bookings, count } = {},
     isPending,
-    error,
+    // error,
   } = useQuery({
     queryKey: ["bookings", filter, sort, page],
     queryFn: () => getBookings({ filter, sort, page }), //promise

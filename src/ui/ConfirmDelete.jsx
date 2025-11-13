@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import Button from "./Button";
 import Heading from "./Heading";
-import { useContext } from "react";
-import { ModalContext } from "./Modal-v1";
 
 const StyledConfirmDelete = styled.div`
   width: 40rem;

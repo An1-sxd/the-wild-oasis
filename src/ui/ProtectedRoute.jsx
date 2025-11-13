@@ -16,7 +16,7 @@ function ProtectedRoute({ children }) {
   const navigate = useNavigate();
 
   // ::1_ Load The Authenticated User::
-  const { user, isGettingUser, isAuthenticated } = useUser();
+  const { isGettingUser, isAuthenticated } = useUser();
 
   // ##step 2 and 3 should be swapped , but since hooks (useEffect) cannot be called conditionally, so they're like this : ##
 

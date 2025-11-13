@@ -80,7 +80,7 @@ function CreateCabinForm({ cabin = {}, onClose }) {
         }
       );
   }
-  function onError(error) {
+  function onError() {
     // console.log(error);
   }
 
