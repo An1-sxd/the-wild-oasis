@@ -7,7 +7,7 @@ import useUpdateSettings from "./useUpdateSettings";
 
 function UpdateSettingsForm() {
   const {
-    data: {
+    settings: {
       minBookingLength,
       maxBookingLength,
       maxGuestsPerBooking,
@@ -15,6 +15,8 @@ function UpdateSettingsForm() {
     } = {}, //****//
     isPending,
   } = useSettings();
+
+  console.log(minBookingLength)
 
   const { mutateUpdate, isUpdating } = useUpdateSettings();
 

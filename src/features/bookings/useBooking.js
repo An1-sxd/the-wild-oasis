@@ -12,7 +12,7 @@ function useBooking(bookingId) {
     retry: false,
   });
 
-  return { isPending, booking };
+  return { isPending, booking,error };
 }
 
 export default useBooking;
